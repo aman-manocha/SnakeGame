@@ -22,8 +22,9 @@ clock = pygame.time.Clock()
 
 font = pygame.font.SysFont(None, 20)
 
-def snake(lead_x,lead_y,block_size):
-    pygame.draw.rect(gameDisplay, green, [lead_x,lead_y,block_size,block_size])
+def snake(block_size, snakelist):
+    for XnY in snakelist:
+        pygame.draw.rect(gameDisplay, green, [XnY[0],XnY[1],block_size,block_size])
 
 def message_to_screen(msg,color):
     screen_text = font.render(msg, True, color)
@@ -38,6 +39,9 @@ def gameloop():
     
     lead_x_change = 0
     lead_y_change = 0
+
+    snakeList = []
+    snakeLength = 1
 
     randAppleX = round(random.randrange(0, display_width-block_size)/10.0)*10.0
     randAppleY = round(random.randrange(0, display_height-block_size)/10.0)*10.0
@@ -79,14 +83,31 @@ def gameloop():
         
         lead_x += lead_x_change
         lead_y += lead_y_change
+        
         gameDisplay.fill(white)
         pygame.draw.rect(gameDisplay, red , [randAppleX, randAppleY, block_size, block_size])
-        snake(lead_x,lead_y,block_size)
+
+        
+        snakeHead = []
+        snakeHead.append(lead_x)
+        snakeHead.append(lead_y)
+        snakeList.append(snakeHead)
+        
+        if len(snakeList) > snakeLength:
+            del snakeList[0]
+
+        for eachsegment in snakeList[:-1]:
+            if eachsegment == snakeHead:
+                gameOver = True
+                                     
+        snake(block_size, snakeList)
+        
         pygame.display.update()
 
         if lead_x == randAppleX and lead_y == randAppleY:
             randAppleX = round(random.randrange(0, display_width-block_size)/10.0)*10.0
             randAppleY = round(random.randrange(0, display_height-block_size)/10.0)*10.0
+            snakeLength += 1
 
         clock.tick(FPS)
         
