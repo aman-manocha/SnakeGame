@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 
 pygame.init()
 
@@ -33,6 +34,9 @@ def gameloop():
     
     lead_x_change = 0
     lead_y_change = 0
+    
+    randAppleX = random.randrange(0, display_width-block_size)
+    randAppleY = random.randrange(0, display_height-block_size)
 
     while not gameExit:
 
@@ -72,7 +76,8 @@ def gameloop():
         lead_x += lead_x_change
         lead_y += lead_y_change
         gameDisplay.fill(white)
-        pygame.draw.rect(gameDisplay, black, [lead_x,lead_y,10,10])
+        pygame.draw.rect(gameDisplay, red , [randAppleX, randAppleY, block_size, block_size])
+        pygame.draw.rect(gameDisplay, black, [lead_x,lead_y,block_size,block_size])
         pygame.display.update()
 
         clock.tick(FPS)
